@@ -3,7 +3,15 @@
 import { useEffect, useState } from "react";
 import { useStore } from "@/store/useStore";
 import { motion, useSpring } from "framer-motion";
-import { Cpu, Globe, Zap, Orbit } from "lucide-react";
+import {
+  Cpu,
+  Globe,
+  Zap,
+  Orbit,
+  Twitter,
+  Linkedin,
+  Github,
+} from "lucide-react";
 
 const DataRow = ({
   label,
@@ -58,6 +66,41 @@ const SceneIndicator = () => {
         );
       })}
     </div>
+  );
+};
+
+const SocialLinks = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-6 pointer-events-auto z-50"
+    >
+      <a
+        href="https://x.com/suryansh777777"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-cyan-500 hover:text-cyan-300 transition-colors duration-300"
+      >
+        <Twitter size={20} />
+      </a>
+      <a
+        href="https://linkedin.com/in/suryansh777777"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-cyan-500 hover:text-cyan-300 transition-colors duration-300"
+      >
+        <Linkedin size={20} />
+      </a>
+      <a
+        href="https://github.com/Suryansh777777/Jarvis-CV"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-cyan-500 hover:text-cyan-300 transition-colors duration-300"
+      >
+        <Github size={20} />
+      </a>
+    </motion.div>
   );
 };
 
@@ -211,6 +254,9 @@ export default function HUD() {
           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-0.5 bg-cyan-500/50" />
         </div>
       </motion.div>
+
+      {/* Social Links (Bottom Center) */}
+      <SocialLinks />
 
       {/* Static Overlays (Vignette/Scanlines) */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_50%,black_120%)] pointer-events-none opacity-50" />

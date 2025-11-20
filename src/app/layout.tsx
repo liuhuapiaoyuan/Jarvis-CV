@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "J.A.R.V.I.S. HUD",
     description: "Advanced Holographic User Interface",
-    url: "https://jarvis-hud-kappa.vercel.app/",
+    url: "https://jarvis-cv.vercel.app/",
     siteName: "J.A.R.V.I.S. HUD",
     locale: "en_US",
     type: "website",
