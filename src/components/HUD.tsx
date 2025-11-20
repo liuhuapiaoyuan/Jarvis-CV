@@ -37,14 +37,14 @@ const SceneIndicator = () => {
   ];
 
   return (
-    <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-4 pointer-events-auto">
+    <div className="absolute top-4 md:top-10 left-1/2 -translate-x-1/2 flex gap-2 md:gap-4 pointer-events-auto w-full justify-center px-2">
       {scenes.map((scene, i) => {
         const isActive = i === activeScene;
         const Icon = scene.icon;
         return (
           <motion.div
             key={i}
-            className={`flex items-center gap-2 px-4 py-2 rounded border backdrop-blur-md transition-all duration-500 ${
+            className={`flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 rounded border backdrop-blur-md transition-all duration-500 ${
               isActive
                 ? "border-cyan-400 bg-cyan-900/40 shadow-[0_0_15px_rgba(0,243,255,0.3)]"
                 : "border-cyan-900/30 bg-black/40 opacity-50"
@@ -52,13 +52,15 @@ const SceneIndicator = () => {
             animate={{ scale: isActive ? 1.1 : 1 }}
           >
             <Icon
-              size={14}
-              className={isActive ? "text-cyan-300" : "text-cyan-700"}
+              size={12}
+              className={`${
+                isActive ? "text-cyan-300" : "text-cyan-700"
+              } md:w-[14px] md:h-[14px]`}
             />
             <span
-              className={`text-xs font-bold tracking-widest ${
+              className={`text-[10px] md:text-xs font-bold tracking-widest ${
                 isActive ? "text-cyan-100" : "text-cyan-800"
-              }`}
+              } hidden sm:inline`}
             >
               {scene.name}
             </span>
@@ -74,7 +76,7 @@ const SocialLinks = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-6 pointer-events-auto z-50"
+      className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-6 pointer-events-auto z-50"
     >
       <a
         href="https://x.com/suryansh777777"
@@ -82,7 +84,7 @@ const SocialLinks = () => {
         rel="noopener noreferrer"
         className="text-cyan-500 hover:text-cyan-300 transition-colors duration-300"
       >
-        <Twitter size={20} />
+        <Twitter size={16} className="md:w-5 md:h-5" />
       </a>
       <a
         href="https://linkedin.com/in/suryansh777777"
@@ -90,7 +92,7 @@ const SocialLinks = () => {
         rel="noopener noreferrer"
         className="text-cyan-500 hover:text-cyan-300 transition-colors duration-300"
       >
-        <Linkedin size={20} />
+        <Linkedin size={16} className="md:w-5 md:h-5" />
       </a>
       <a
         href="https://github.com/Suryansh777777/Jarvis-CV"
@@ -98,20 +100,39 @@ const SocialLinks = () => {
         rel="noopener noreferrer"
         className="text-cyan-500 hover:text-cyan-300 transition-colors duration-300"
       >
-        <Github size={20} />
+        <Github size={16} className="md:w-5 md:h-5" />
       </a>
     </motion.div>
   );
 };
 
 export default function HUD() {
-  const { faceLandmarks, hudState, updateHUD } = useStore();
+  const { faceLandmarks, hudState, updateHUD, nextScene, prevScene } =
+    useStore();
 
   // Use Framer Motion springs for performant, smooth parallax without re-renders
   const offsetX = useSpring(0, { stiffness: 50, damping: 20 });
   const offsetY = useSpring(0, { stiffness: 50, damping: 20 });
 
   const [cpuUsage, setCpuUsage] = useState(35);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+
+  // Touch Handling for Swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextScene(); // Swipe Left -> Next
+      else prevScene(); // Swipe Right -> Prev
+    }
+    setTouchStart(null);
+  };
 
   // Parallax Effect based on Face Position
   useEffect(() => {
@@ -140,10 +161,12 @@ export default function HUD() {
 
   return (
     <div
-      className="absolute inset-0 z-20 pointer-events-none overflow-hidden"
+      className="absolute inset-0 z-20 overflow-hidden touch-none"
       style={{
         perspective: "1000px",
       }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Moving Container with Parallax */}
       <motion.div
@@ -157,11 +180,11 @@ export default function HUD() {
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          className="absolute top-10 left-10 w-64 holographic-panel p-4 rounded-tl-2xl clip-corner-br"
+          className="absolute top-20 left-4 md:top-10 md:left-10 w-40 md:w-64 holographic-panel p-2 md:p-4 rounded-tl-2xl clip-corner-br"
         >
           <div className="flex items-center gap-2 mb-2 border-b border-cyan-500/30 pb-2">
             <Cpu className="text-cyan-400 animate-pulse" size={18} />
-            <span className="text-sm font-bold text-cyan-300 tracking-[0.2em]">
+            <span className="text-[10px] md:text-sm font-bold text-cyan-300 tracking-[0.2em]">
               CORE SYSTEMS
             </span>
           </div>
@@ -185,12 +208,12 @@ export default function HUD() {
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
-          className="absolute top-10 right-10 text-right"
+          className="absolute top-20 right-4 md:top-10 md:right-10 text-right"
         >
-          <h1 className="text-4xl font-bold text-white tracking-[0.2em] text-glow opacity-90">
+          <h1 className="text-2xl md:text-4xl font-bold text-white tracking-[0.2em] text-glow opacity-90">
             J.A.R.V.I.S
           </h1>
-          <div className="flex items-center justify-end gap-2 text-cyan-400 text-xs tracking-[0.4em] mt-1">
+          <div className="flex items-center justify-end gap-2 text-cyan-400 text-[10px] md:text-xs tracking-[0.4em] mt-1">
             <span className="w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
             ONLINE
           </div>
@@ -200,17 +223,19 @@ export default function HUD() {
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute bottom-20 right-10 w-72 holographic-panel p-4 clip-corner-tl"
+          className="absolute bottom-24 right-4 md:bottom-20 md:right-10 w-48 md:w-72 holographic-panel p-2 md:p-4 clip-corner-tl"
         >
-          <div className="flex justify-between items-end mb-4">
-            <span className="text-4xl font-thin text-white font-tech">
+          <div className="flex justify-between items-end mb-2 md:mb-4">
+            <span className="text-2xl md:text-4xl font-thin text-white font-tech">
               {hudState.powerLevel}%
             </span>
-            <span className="text-xs text-cyan-500 mb-1">OUTPUT CAPACITY</span>
+            <span className="text-[10px] md:text-xs text-cyan-500 mb-1">
+              OUTPUT CAPACITY
+            </span>
           </div>
 
           <div className="space-y-1">
-            <div className="flex justify-between text-xs text-cyan-400">
+            <div className="flex justify-between text-[10px] md:text-xs text-cyan-400">
               <span>THREAT ANALYSIS</span>
               <span
                 className={
@@ -224,7 +249,7 @@ export default function HUD() {
             </div>
             <div className="h-1 bg-cyan-900/50 w-full">
               <motion.div
-                className="h-full bg-gradient-to-r from-cyan-500 to-blue-600"
+                className="h-full bg-linear-to-r from-cyan-500 to-blue-600"
                 initial={{ width: 0 }}
                 animate={{ width: "30%" }}
               />
@@ -236,7 +261,7 @@ export default function HUD() {
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          className="absolute bottom-20 left-10 w-64 text-xs font-mono text-cyan-500/60 space-y-1"
+          className="absolute bottom-24 left-4 md:bottom-20 md:left-10 w-40 md:w-64 text-[10px] md:text-xs font-mono text-cyan-500/60 space-y-1 hidden sm:block"
         >
           <p>&gt; Initializing biometric sensors...</p>
           <p>&gt; Connecting to satellite array...</p>
@@ -245,7 +270,7 @@ export default function HUD() {
         </motion.div>
 
         {/* CENTER: Reticle */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] opacity-20 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] md:w-[400px] md:h-[400px] opacity-20 pointer-events-none">
           <div className="absolute inset-0 border border-cyan-500/30 rounded-full scale-[0.8]" />
           <div className="absolute inset-0 border-l border-r border-cyan-500/20 rounded-full animate-[spin_10s_linear_infinite]" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0.5 h-4 bg-cyan-500/50" />

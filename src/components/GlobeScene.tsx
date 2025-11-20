@@ -1,10 +1,18 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useRef } from "react";
 import { Mesh, Group } from "three";
 import { useStore } from "@/store/useStore";
 import { Sphere, Torus, Ring, Icosahedron } from "@react-three/drei";
+
+function useResponsivePositionAndScale() {
+  const { size } = useThree();
+  const isMobile = size.width < 768;
+  const position = isMobile ? [0, -0.5, 0] : [-2, 0, 0];
+  const scale = isMobile ? 0.6 : 1; // Reduce scale to 60% on mobile
+  return { position, scale };
+}
 
 // --- Scene 0: Arc Reactor ---
 function ArcReactor({ active }: { active: boolean }) {
@@ -12,6 +20,8 @@ function ArcReactor({ active }: { active: boolean }) {
   const ring1Ref = useRef<Mesh>(null);
   const ring2Ref = useRef<Mesh>(null);
   const coreRef = useRef<Mesh>(null);
+
+  const { position, scale: mobileScale } = useResponsivePositionAndScale();
 
   const { globeRotation, globeScale } = useStore();
 
@@ -37,7 +47,8 @@ function ArcReactor({ active }: { active: boolean }) {
     coreRef.current.scale.setScalar(pulse);
 
     // Scale & Transition
-    const targetScale = active ? globeScale : 0;
+    // Apply mobile scale multiplier
+    const targetScale = active ? globeScale * mobileScale : 0;
     groupRef.current.scale.lerp(
       { x: targetScale, y: targetScale, z: targetScale },
       0.1
@@ -46,7 +57,8 @@ function ArcReactor({ active }: { active: boolean }) {
   });
 
   return (
-    <group ref={groupRef} position={[-2, 0, 0]}>
+    // @ts-expect-error - position type mismatch in react-three/fiber types sometimes
+    <group ref={groupRef} position={position}>
       <Sphere args={[0.4, 32, 32]} ref={coreRef}>
         <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
       </Sphere>
@@ -93,6 +105,7 @@ function ArcReactor({ active }: { active: boolean }) {
 function EarthScene({ active }: { active: boolean }) {
   const groupRef = useRef<Group>(null);
   const { globeRotation, globeScale } = useStore();
+  const { position, scale: mobileScale } = useResponsivePositionAndScale();
 
   useFrame((state) => {
     if (!groupRef.current) return;
@@ -100,7 +113,7 @@ function EarthScene({ active }: { active: boolean }) {
     groupRef.current.rotation.y =
       globeRotation.y + state.clock.elapsedTime * 0.05;
 
-    const targetScale = active ? globeScale : 0;
+    const targetScale = active ? globeScale * mobileScale : 0;
     groupRef.current.scale.lerp(
       { x: targetScale, y: targetScale, z: targetScale },
       0.1
@@ -109,7 +122,8 @@ function EarthScene({ active }: { active: boolean }) {
   });
 
   return (
-    <group ref={groupRef} position={[-2, 0, 0]}>
+    // @ts-expect-error - position type mismatch in react-three/fiber types sometimes
+    <group ref={groupRef} position={position}>
       <Sphere args={[1.2, 32, 32]}>
         <meshBasicMaterial
           color="#00ff00"
@@ -144,13 +158,14 @@ function EarthScene({ active }: { active: boolean }) {
 function SolarSystem({ active }: { active: boolean }) {
   const groupRef = useRef<Group>(null);
   const { globeRotation, globeScale } = useStore();
+  const { position, scale: mobileScale } = useResponsivePositionAndScale();
 
   useFrame(() => {
     if (!groupRef.current) return;
     groupRef.current.rotation.x = globeRotation.x * 0.5;
     groupRef.current.rotation.y = globeRotation.y * 0.5;
 
-    const targetScale = active ? globeScale : 0;
+    const targetScale = active ? globeScale * mobileScale : 0;
     groupRef.current.scale.lerp(
       { x: targetScale, y: targetScale, z: targetScale },
       0.1
@@ -159,7 +174,8 @@ function SolarSystem({ active }: { active: boolean }) {
   });
 
   return (
-    <group ref={groupRef} position={[-2, 0, 0]}>
+    // @ts-expect-error - position type mismatch in react-three/fiber types sometimes
+    <group ref={groupRef} position={position}>
       {/* Sun */}
       <Sphere args={[0.6, 32, 32]}>
         <meshBasicMaterial
