@@ -1,88 +1,213 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Mesh, Group } from "three";
 import { useStore } from "@/store/useStore";
-import { Sphere, Torus, Ring, Environment } from "@react-three/drei";
+import { Sphere, Torus, Ring, Icosahedron } from "@react-three/drei";
 
-function ArcReactor() {
+// --- Scene 0: Arc Reactor ---
+function ArcReactor({ active }: { active: boolean }) {
   const groupRef = useRef<Group>(null);
   const ring1Ref = useRef<Mesh>(null);
   const ring2Ref = useRef<Mesh>(null);
   const coreRef = useRef<Mesh>(null);
-  
+
   const { globeRotation, globeScale } = useStore();
 
   useFrame((state, delta) => {
-    if (!groupRef.current || !ring1Ref.current || !ring2Ref.current || !coreRef.current) return;
+    if (
+      !groupRef.current ||
+      !ring1Ref.current ||
+      !ring2Ref.current ||
+      !coreRef.current
+    )
+      return;
 
-    // Interactive Rotation
+    // Rotation
     groupRef.current.rotation.x = globeRotation.x * 0.5;
     groupRef.current.rotation.y = globeRotation.y * 0.5;
 
-    // Idle Animation
+    // Animation
     ring1Ref.current.rotation.z += delta * 0.5;
     ring2Ref.current.rotation.x -= delta * 0.3;
-    
-    // Pulse Effect
+
+    // Pulse
     const pulse = Math.sin(state.clock.elapsedTime * 2) * 0.1 + 1;
     coreRef.current.scale.setScalar(pulse);
 
-    // Global Scale
-    groupRef.current.scale.setScalar(globeScale);
+    // Scale & Transition
+    const targetScale = active ? globeScale : 0;
+    groupRef.current.scale.lerp(
+      { x: targetScale, y: targetScale, z: targetScale },
+      0.1
+    );
+    groupRef.current.visible = groupRef.current.scale.x > 0.01;
   });
 
   return (
     <group ref={groupRef} position={[-2, 0, 0]}>
-      {/* Core Glow */}
       <Sphere args={[0.4, 32, 32]} ref={coreRef}>
         <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
       </Sphere>
       <Sphere args={[0.6, 32, 32]}>
-        <meshBasicMaterial color="#00ffff" transparent opacity={0.3} wireframe />
+        <meshBasicMaterial
+          color="#00ffff"
+          transparent
+          opacity={0.3}
+          wireframe
+        />
       </Sphere>
-      
-      {/* Inner Ring */}
       <Torus ref={ring1Ref} args={[0.8, 0.05, 16, 100]}>
-        <meshStandardMaterial color="#0088ff" emissive="#0044aa" emissiveIntensity={2} wireframe />
+        <meshStandardMaterial
+          color="#0088ff"
+          emissive="#0044aa"
+          emissiveIntensity={2}
+          wireframe
+        />
       </Torus>
-      
-      {/* Middle Ring */}
-      <Torus ref={ring2Ref} args={[1.1, 0.02, 16, 100]} rotation={[Math.PI / 2, 0, 0]}>
-        <meshStandardMaterial color="#00ffff" emissive="#00ffff" emissiveIntensity={1} />
+      <Torus
+        ref={ring2Ref}
+        args={[1.1, 0.02, 16, 100]}
+        rotation={[Math.PI / 2, 0, 0]}
+      >
+        <meshStandardMaterial
+          color="#00ffff"
+          emissive="#00ffff"
+          emissiveIntensity={1}
+        />
       </Torus>
-
-      {/* Outer Structure */}
-      <Ring args={[1.3, 1.4, 64]} rotation={[0, 0, 0]}>
-         <meshStandardMaterial color="#002244" side={2} transparent opacity={0.5} />
+      <Ring args={[1.3, 1.4, 64]}>
+        <meshStandardMaterial
+          color="#002244"
+          side={2}
+          transparent
+          opacity={0.5}
+        />
       </Ring>
-      
-      {/* Floating Particles */}
-      <group>
-        {[...Array(8)].map((_, i) => (
-          <mesh key={i} position={[
-            Math.sin(i) * 1.8,
-            Math.cos(i) * 1.8,
-            Math.sin(i * 2) * 0.5
-          ]}>
-            <boxGeometry args={[0.1, 0.1, 0.1]} />
-            <meshBasicMaterial color="#00ffff" transparent opacity={0.6} />
-          </mesh>
-        ))}
-      </group>
+    </group>
+  );
+}
+
+// --- Scene 1: Holographic Earth ---
+function EarthScene({ active }: { active: boolean }) {
+  const groupRef = useRef<Group>(null);
+  const { globeRotation, globeScale } = useStore();
+
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    groupRef.current.rotation.x = globeRotation.x;
+    groupRef.current.rotation.y =
+      globeRotation.y + state.clock.elapsedTime * 0.05;
+
+    const targetScale = active ? globeScale : 0;
+    groupRef.current.scale.lerp(
+      { x: targetScale, y: targetScale, z: targetScale },
+      0.1
+    );
+    groupRef.current.visible = groupRef.current.scale.x > 0.01;
+  });
+
+  return (
+    <group ref={groupRef} position={[-2, 0, 0]}>
+      <Sphere args={[1.2, 32, 32]}>
+        <meshBasicMaterial
+          color="#00ff00"
+          wireframe
+          transparent
+          opacity={0.2}
+        />
+      </Sphere>
+      <Icosahedron args={[1.1, 2]}>
+        <meshStandardMaterial
+          color="#003300"
+          transparent
+          opacity={0.8}
+          flatShading
+        />
+      </Icosahedron>
+      {/* Satellites */}
+      {[...Array(4)].map((_, i) => (
+        <mesh
+          key={i}
+          position={[Math.sin(i * 1.5) * 1.8, Math.cos(i * 1.5) * 1.8, 0]}
+        >
+          <boxGeometry args={[0.1, 0.1, 0.1]} />
+          <meshBasicMaterial color="#ffffff" />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// --- Scene 2: Solar System ---
+function SolarSystem({ active }: { active: boolean }) {
+  const groupRef = useRef<Group>(null);
+  const { globeRotation, globeScale } = useStore();
+
+  useFrame(() => {
+    if (!groupRef.current) return;
+    groupRef.current.rotation.x = globeRotation.x * 0.5;
+    groupRef.current.rotation.y = globeRotation.y * 0.5;
+
+    const targetScale = active ? globeScale : 0;
+    groupRef.current.scale.lerp(
+      { x: targetScale, y: targetScale, z: targetScale },
+      0.1
+    );
+    groupRef.current.visible = groupRef.current.scale.x > 0.01;
+  });
+
+  return (
+    <group ref={groupRef} position={[-2, 0, 0]}>
+      {/* Sun */}
+      <Sphere args={[0.6, 32, 32]}>
+        <meshBasicMaterial
+          color="#ffcc00"
+          transparent
+          opacity={0.8}
+          wireframe
+        />
+      </Sphere>
+      {/* Orbit Rings */}
+      {[1.2, 1.8, 2.4].map((rad, i) => (
+        <Torus
+          key={i}
+          args={[rad, 0.02, 16, 64]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <meshBasicMaterial color="#444444" transparent opacity={0.5} />
+        </Torus>
+      ))}
+      {/* Planets (Simple) */}
+      <mesh position={[1.2, 0, 0]}>
+        <sphereGeometry args={[0.15]} />
+        <meshStandardMaterial color="#ff4444" />
+      </mesh>
+      <mesh position={[-1.8, 0.2, 0.5]}>
+        <sphereGeometry args={[0.2]} />
+        <meshStandardMaterial color="#4444ff" />
+      </mesh>
     </group>
   );
 }
 
 export default function GlobeScene() {
+  const { activeScene } = useStore();
+
   return (
     <div className="absolute inset-0 z-10 pointer-events-none">
-      <Canvas camera={{ position: [0, 0, 6], fov: 45 }} gl={{ antialias: true, alpha: true }}>
+      <Canvas
+        camera={{ position: [0, 0, 6], fov: 45 }}
+        gl={{ antialias: true, alpha: true }}
+      >
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         <pointLight position={[-10, -10, -10]} color="#00ffff" intensity={2} />
-        <ArcReactor />
+
+        <ArcReactor active={activeScene === 0} />
+        <EarthScene active={activeScene === 1} />
+        <SolarSystem active={activeScene === 2} />
       </Canvas>
     </div>
   );

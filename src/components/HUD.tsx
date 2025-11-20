@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useStore } from "@/store/useStore";
-import { motion } from "framer-motion";
-import { Shield, Activity, Cpu, Radio, Crosshair } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Shield, Activity, Cpu, Radio, Crosshair, Globe, Zap, Orbit } from "lucide-react";
 
 const Hexagon = ({ className }: { className?: string }) => (
   <div className={`relative w-4 h-4 ${className}`}>
@@ -17,6 +17,40 @@ const DataRow = ({ label, value, color = "text-cyan-400" }: { label: string, val
     <span className={`${color} font-bold`}>{value}</span>
   </div>
 );
+
+const SceneIndicator = () => {
+  const { activeScene } = useStore();
+  const scenes = [
+    { name: "ARC REACTOR", icon: Zap },
+    { name: "GLOBAL NET", icon: Globe },
+    { name: "SOLAR ARRAY", icon: Orbit }
+  ];
+
+  return (
+    <div className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-4 pointer-events-auto">
+      {scenes.map((scene, i) => {
+        const isActive = i === activeScene;
+        const Icon = scene.icon;
+        return (
+          <motion.div
+            key={i}
+            className={`flex items-center gap-2 px-4 py-2 rounded border backdrop-blur-md transition-all duration-500 ${
+              isActive 
+                ? "border-cyan-400 bg-cyan-900/40 shadow-[0_0_15px_rgba(0,243,255,0.3)]" 
+                : "border-cyan-900/30 bg-black/40 opacity-50"
+            }`}
+            animate={{ scale: isActive ? 1.1 : 1 }}
+          >
+            <Icon size={14} className={isActive ? "text-cyan-300" : "text-cyan-700"} />
+            <span className={`text-xs font-bold tracking-widest ${isActive ? "text-cyan-100" : "text-cyan-800"}`}>
+              {scene.name}
+            </span>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+};
 
 export default function HUD() {
   const { faceLandmarks, hudState, updateHUD } = useStore();
@@ -65,6 +99,10 @@ export default function HUD() {
         animate={{ x: offset.x, y: offset.y }}
         transition={{ type: "spring", stiffness: 50, damping: 20 }}
       >
+        
+        {/* Scene Indicator (Top Center) */}
+        <SceneIndicator />
+
         {/* TOP LEFT: System Core */}
         <motion.div 
           initial={{ opacity: 0, x: -50 }}

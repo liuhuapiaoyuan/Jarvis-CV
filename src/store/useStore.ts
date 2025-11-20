@@ -38,6 +38,7 @@ interface StoreState {
   // Globe State
   globeRotation: { x: number; y: number };
   globeScale: number;
+  activeScene: number;
   
   // HUD State
   hudState: HUDState;
@@ -54,6 +55,8 @@ interface StoreState {
   setGestures: (left: GestureType, right: GestureType) => void;
   setGlobeRotation: (rotation: { x: number; y: number }) => void;
   setGlobeScale: (scale: number) => void;
+  nextScene: () => void;
+  prevScene: () => void;
   updateHUD: (updates: Partial<HUDState>) => void;
   updateHandUI: (hand: 'left' | 'right', data: Partial<HandUI>) => void;
 }
@@ -68,6 +71,7 @@ export const useStore = create<StoreState>((set) => ({
 
   globeRotation: { x: 0, y: 0 },
   globeScale: 1.5,
+  activeScene: 0,
   
   hudState: {
     systemStatus: 'NOMINAL',
@@ -86,6 +90,8 @@ export const useStore = create<StoreState>((set) => ({
   setGestures: (left, right) => set({ leftGesture: left, rightGesture: right }),
   setGlobeRotation: (rotation) => set({ globeRotation: rotation }),
   setGlobeScale: (scale) => set({ globeScale: scale }),
+  nextScene: () => set((state) => ({ activeScene: (state.activeScene + 1) % 3 })),
+  prevScene: () => set((state) => ({ activeScene: (state.activeScene - 1 + 3) % 3 })),
   updateHUD: (updates) => set((state) => ({ hudState: { ...state.hudState, ...updates } })),
   updateHandUI: (hand, data) => set((state) => ({
     handUiData: {
