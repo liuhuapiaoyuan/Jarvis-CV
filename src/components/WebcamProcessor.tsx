@@ -39,8 +39,9 @@ export default function WebcamProcessor() {
 
       // Dynamic imports
       const { Camera } = await import("@mediapipe/camera_utils");
-      const { Hands } = await import("@mediapipe/hands");
+      const { Hands, HAND_CONNECTIONS } = await import("@mediapipe/hands");
       const { FaceMesh } = await import("@mediapipe/face_mesh");
+      const { drawConnectors, drawLandmarks } = await import("@mediapipe/drawing_utils");
 
       // Initialize Hands
       hands = new Hands({
@@ -109,6 +110,15 @@ export default function WebcamProcessor() {
 
         if (results.multiHandLandmarks) {
           for (const [index, landmarks] of results.multiHandLandmarks.entries()) {
+            // Draw Sci-Fi Skeleton
+            drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: 'rgba(0, 243, 255, 0.6)', lineWidth: 2 });
+            drawLandmarks(canvasCtx, landmarks, { 
+              color: 'rgba(255, 255, 255, 0.8)', 
+              fillColor: 'rgba(0, 243, 255, 0.8)', 
+              radius: 2,
+              lineWidth: 1
+            });
+
             const label = results.multiHandedness[index]?.label;
             const gesture = detectGesture(landmarks);
             
