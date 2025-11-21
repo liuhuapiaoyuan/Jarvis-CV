@@ -11,9 +11,9 @@ import { useState } from "react";
 import { useStore } from "@/store/useStore";
 
 export default function NeuralPage() {
-  const [theme, setTheme] = useState<ThemeKey>("CYBER");
+  // const [theme, setTheme] = useState<ThemeKey>("CYBER"); // Moved to global store
   const [density, setDensity] = useState(1.2);
-  const { globeRotation, globeScale } = useStore();
+  const { globeRotation, globeScale, theme, setTheme } = useStore();
 
   return (
     <main className="relative w-screen h-screen overflow-hidden ">

@@ -202,12 +202,14 @@ export default function WebcamProcessor() {
           else playSelectSound();
         }
 
-        prevGestureLeft.current = leftGesture;
-        prevGestureRight.current = rightGesture;
+
 
         setHands(leftHand, rightHand);
         setGestures(leftGesture, rightGesture);
         processInteraction(leftHand, rightHand, leftGesture, rightGesture);
+
+        prevGestureLeft.current = leftGesture;
+        prevGestureRight.current = rightGesture;
 
         canvasCtx.restore();
       }
@@ -403,6 +405,24 @@ export default function WebcamProcessor() {
           if (!activeHand && (!swipeHand || swipeGesture !== "PALM_OPEN")) {
             prevHandPos.current = null;
           }
+        }
+
+        // 4. Theme Shifter (VICTORY)
+        // Use left hand for theme shifting to avoid conflict with rotation/swipe
+        if (leftGesture === "VICTORY" && prevGestureLeft.current !== "VICTORY") {
+           useStore.getState().cycleTheme();
+           playSelectSound();
+        }
+
+        // 5. Neural Pulse (PALM_OPEN)
+        // Trigger pulse if palm is open and NOT swiping (stationary)
+        // We use a simple check: if gesture is PALM_OPEN and we haven't swiped recently
+        if ((leftGesture === "PALM_OPEN" || rightGesture === "PALM_OPEN") && 
+            now - swipeCooldown.current > 500) {
+            // Rate limit pulse
+             if (Math.random() < 0.1) { // 10% chance per frame to trigger pulse while holding open
+                useStore.getState().triggerPulse();
+             }
         }
       }
     };

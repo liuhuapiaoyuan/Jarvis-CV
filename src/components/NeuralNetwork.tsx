@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { Canvas, useFrame, ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Stats } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
+import { useStore } from "@/store/useStore";
 
 // --- Constants & Types ---
 const MAX_PULSES = 10;
@@ -210,6 +211,24 @@ export function DynamicNetwork({
     pulses.current.push({ pos: point.clone(), time: 0 }); // Time will be set in useFrame
     if (pulses.current.length > MAX_PULSES) pulses.current.shift();
   };
+
+  // Listen for global pulse trigger
+  const pulseTrigger = useStore((state) => state.pulseTrigger);
+  const prevPulseTrigger = useRef(0);
+
+  useEffect(() => {
+    if (pulseTrigger > prevPulseTrigger.current) {
+      // Trigger a random pulse
+      const r = 5;
+      const theta = Math.random() * 2 * Math.PI;
+      const phi = Math.acos(2 * Math.random() - 1);
+      const x = r * Math.sin(phi) * Math.cos(theta);
+      const y = r * Math.sin(phi) * Math.sin(theta);
+      const z = r * Math.cos(phi);
+      triggerPulse(new THREE.Vector3(x, y, z));
+      prevPulseTrigger.current = pulseTrigger;
+    }
+  }, [pulseTrigger]);
 
   // Handle Clicks
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
