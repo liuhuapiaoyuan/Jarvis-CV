@@ -1,71 +1,18 @@
 "use client";
 import WebcamProcessor from "@/components/WebcamProcessor";
-import { DynamicNetwork, Controls, THEMES, ThemeKey } from "@/components/NeuralNetwork";
+import NeuralScene from "@/components/NeuralScene";
 import HandUI from "@/components/HandUI";
-import { Canvas } from "@react-three/fiber";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import { OrbitControls } from "@react-three/drei";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
-import { useStore } from "@/store/useStore";
 
 export default function NeuralPage() {
-  // const [theme, setTheme] = useState<ThemeKey>("CYBER"); // Moved to global store
-  const [density, setDensity] = useState(1.2);
-  const { globeRotation, globeScale, theme, setTheme } = useStore();
-
   return (
     <main className="relative w-screen h-screen overflow-hidden ">
       {/* 1. Background: Webcam Feed (Computer Vision) */}
       <WebcamProcessor />
 
-      {/* 2. Neural Network Layer */}
-      <div className="absolute inset-0 z-10">
-        <div
-          className="absolute inset-0 transition-colors duration-1000 pointer-events-none"
-          style={{ backgroundColor: THEMES[theme].bg, opacity: 0.3 }}
-        />
-        <Canvas
-          camera={{ position: [0, 0, 12], fov: 50 }}
-          gl={{
-            antialias: false,
-            alpha: true,
-            powerPreference: "high-performance",
-          }}
-        >
-          <OrbitControls
-            autoRotate={false} // Disable auto-rotate to let gestures control it
-            enableZoom={true}
-            maxDistance={25}
-            minDistance={5}
-          />
-
-          {/* The Dynamic Network Visual */}
-          <DynamicNetwork 
-            themeKey={theme} 
-            density={density} 
-            active={true}
-            rotation={globeRotation}
-            scale={globeScale}
-          />
-
-          <EffectComposer>
-            <Bloom
-              luminanceThreshold={0.1}
-              mipmapBlur
-              intensity={1.5}
-              radius={0.4}
-            />
-          </EffectComposer>
-        </Canvas>
-        <Controls
-          theme={theme}
-          setTheme={setTheme}
-          density={density}
-          setDensity={setDensity}
-        />
-      </div>
+      {/* 2. Neural Network Layer (Stateful) */}
+      <NeuralScene />
 
       {/* 3. Hand Interactions Layer */}
       <HandUI />
