@@ -4,6 +4,7 @@ import OverwatchScene from "@/components/OverwatchScene";
 import HandUI from "@/components/HandUI";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import LocationSearch from "@/components/LocationSearch";
 
 export default function OverwatchPage() {
   return (
@@ -30,6 +31,11 @@ export default function OverwatchPage() {
             </span>
           </button>
         </Link>
+      </div>
+
+      {/* 5. Location Search */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-md pointer-events-auto">
+        <LocationSearch />
       </div>
     </main>
   );
