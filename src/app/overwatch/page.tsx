@@ -1,5 +1,5 @@
 "use client";
-import WebcamProcessor from "@/components/WebcamProcessor";
+import WebcamProcessorOverwatch from "@/components/WebcamProcessorOverwatch";
 import OverwatchScene from "@/components/OverwatchScene";
 import HandUI from "@/components/HandUI";
 import Link from "next/link";
@@ -10,7 +10,7 @@ export default function OverwatchPage() {
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-black">
       {/* Background Video / Gesture Processor - PiP Mode */}
-      <WebcamProcessor className="fixed bottom-6 right-6 w-80 h-60 rounded-2xl overflow-hidden border-2 border-cyan-500/50 z-50 shadow-[0_0_30px_rgba(0,255,255,0.2)] bg-black/80 backdrop-blur-sm" />
+      <WebcamProcessorOverwatch className="fixed bottom-6 right-6 w-80 h-60 rounded-2xl overflow-hidden border-2 border-cyan-500/50 z-50 shadow-[0_0_30px_rgba(0,255,255,0.2)] bg-black/80 backdrop-blur-sm" />
 
       {/* 2. Overwatch Scene (Dynamic) */}
       <OverwatchScene />

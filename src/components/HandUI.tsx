@@ -50,18 +50,10 @@ const Repulsor = ({ gesture }: { gesture: GestureType }) => {
 };
 
 export default function HandUI() {
-  const { handUiData, isManipulatingTime } = useStore();
+  const { handUiData } = useStore();
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-50">
-      {/* Time Stone Rune Effect */}
-      {isManipulatingTime && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 border-4 border-green-500 rounded-full animate-spin-slow opacity-80 shadow-[0_0_50px_#00ff00]">
-            <div className="absolute inset-0 border-2 border-green-300 rounded-full scale-75 animate-reverse-spin" />
-            <div className="absolute inset-0 border border-green-400 rotate-45" />
-            <div className="absolute inset-0 border border-green-400 -rotate-45" />
-        </div>
-      )}
 
       {/* Left Hand UI */}
       {handUiData.left.visible && (

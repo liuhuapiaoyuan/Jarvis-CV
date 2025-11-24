@@ -13,7 +13,7 @@ import {
 import type { Results as HandsResults } from "@mediapipe/hands";
 import type { Results as FaceMeshResults } from "@mediapipe/face_mesh";
 
-export default React.memo(function WebcamProcessor({ className = "fixed inset-0 z-0" }: { className?: string }) {
+export default React.memo(function WebcamProcessorOverwatch({ className = "fixed inset-0 z-0" }: { className?: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -30,7 +30,10 @@ export default React.memo(function WebcamProcessor({ className = "fixed inset-0 
 
 
 
-  useEffect(() => {
+    const isMounted = useRef(true);
+
+    useEffect(() => {
+    isMounted.current = true;
     let camera: any = null;
     let hands: any = null;
     let faceMesh: any = null;
@@ -55,7 +58,7 @@ export default React.memo(function WebcamProcessor({ className = "fixed inset-0 
       // Initialize Hands
       hands = new Hands({
         locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/${file}`;
         },
       });
 
@@ -71,7 +74,7 @@ export default React.memo(function WebcamProcessor({ className = "fixed inset-0 
       // Initialize FaceMesh
       faceMesh = new FaceMesh({
         locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/${file}`;
         },
       });
 
@@ -87,6 +90,7 @@ export default React.memo(function WebcamProcessor({ className = "fixed inset-0 
       // Camera setup
       camera = new Camera(videoElement, {
         onFrame: async () => {
+          if (!isMounted.current) return;
           if (faceMesh) await faceMesh.send({ image: videoElement });
           if (hands) await hands.send({ image: videoElement });
         },
@@ -97,6 +101,7 @@ export default React.memo(function WebcamProcessor({ className = "fixed inset-0 
       camera.start();
 
       function onFaceResults(results: FaceMeshResults) {
+        if (!isMounted.current) return;
         const { setFaceLandmarks } = useStore.getState();
         if (
           results.multiFaceLandmarks &&
@@ -109,7 +114,7 @@ export default React.memo(function WebcamProcessor({ className = "fixed inset-0 
       }
 
       function onHandsResults(results: HandsResults) {
-        if (!canvasCtx) return;
+        if (!isMounted.current || !canvasCtx) return;
         canvasCtx.save();
         canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
@@ -512,6 +517,7 @@ export default React.memo(function WebcamProcessor({ className = "fixed inset-0 
     initMediaPipe();
 
     return () => {
+      isMounted.current = false;
       if (camera) (camera as any).stop();
       if (hands) (hands as any).close();
       if (faceMesh) (faceMesh as any).close();
