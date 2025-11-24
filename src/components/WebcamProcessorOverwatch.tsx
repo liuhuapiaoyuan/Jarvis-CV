@@ -259,20 +259,19 @@ export default React.memo(function WebcamProcessorOverwatch({ className = "fixed
 
             if (Math.abs(deltaX) > 0.005 || Math.abs(deltaY) > 0.005) {
                  const { globeCenter, setGlobeCenter, globeScale } = useStore.getState();
-                 
                  // Base sensitivity (Globe View)
                  // We keep the original 15x multiplier for low zoom levels
                  let sensitivity = (0.5 / globeScale) * 15;
                  
                  // Micro-Precision Dampening (City View)
                  // If zoomed in (scale > 1.5), dampen significantly for street-level control
-                 if (globeScale > 1.5) {
-                     sensitivity /= (globeScale * 5.0); // Drastically reduce speed at high zoom
+                 if (globeScale > 2) {
+                     sensitivity /= (globeScale * 20.0); // Drastically reduce speed at high zoom
                  }
-
+                
                  const newLat = globeCenter.lat + (-deltaY) * sensitivity;
                  const clampedLat = Math.max(-85, Math.min(85, newLat));
-
+                
                  setGlobeCenter({
                      lat: clampedLat, 
                      lng: globeCenter.lng - deltaX * sensitivity 
