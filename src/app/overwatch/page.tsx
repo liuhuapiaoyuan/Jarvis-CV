@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import LocationSearch from "@/components/LocationSearch";
 import { SocialLinks } from "@/components/SocialLinks";
+import PhysicsEmoji from "@/components/PhysicsEmoji";
 
 export default function OverwatchPage() {
   return (
@@ -18,6 +19,9 @@ export default function OverwatchPage() {
 
       {/* 手势交互层 */}
       <HandUI />
+
+      {/* 物理Emoji交互层 */}
+      <PhysicsEmoji />
 
       {/* 导航返回 */}
       <div className="absolute top-6 left-6 z-50">

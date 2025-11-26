@@ -3,6 +3,7 @@ import HandUI from "@/components/HandUI";
 import Link from "next/link";
 import NeuralScene from "@/components/NeuralScene";
 import { SocialLinks } from "@/components/SocialLinks";
+import PhysicsEmoji from "@/components/PhysicsEmoji";
 
 export default function Home() {
   return (
@@ -14,7 +15,10 @@ export default function Home() {
       <NeuralScene />
 
       {/* 手势交互层 */}
-       <HandUI />
+      <HandUI />
+
+      {/* 物理Emoji交互层 */}
+      <PhysicsEmoji />
 
       <SocialLinks className="top-6 left-10" />
 
