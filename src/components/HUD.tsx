@@ -8,9 +8,6 @@ import {
   Globe,
   Zap,
   Orbit,
-  Twitter,
-  Linkedin,
-  Github,
 } from "lucide-react";
 
 const DataRow = ({
@@ -31,9 +28,9 @@ const DataRow = ({
 const SceneIndicator = () => {
   const { activeScene } = useStore();
   const scenes = [
-    { name: "ARC REACTOR", icon: Zap },
-    { name: "GLOBAL NET", icon: Globe },
-    { name: "SOLAR ARRAY", icon: Orbit },
+    { name: "方舟反应堆", icon: Zap },
+    { name: "全球网络", icon: Globe },
+    { name: "太阳系阵列", icon: Orbit },
   ];
 
   return (
@@ -72,38 +69,7 @@ const SceneIndicator = () => {
 };
 
 const SocialLinks = () => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-6 pointer-events-auto z-50"
-    >
-      <a
-        href="https://x.com/suryansh777777"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-cyan-500 hover:text-cyan-300 transition-colors duration-300"
-      >
-        <Twitter size={16} className="md:w-5 md:h-5" />
-      </a>
-      <a
-        href="https://linkedin.com/in/suryansh777777"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-cyan-500 hover:text-cyan-300 transition-colors duration-300"
-      >
-        <Linkedin size={16} className="md:w-5 md:h-5" />
-      </a>
-      <a
-        href="https://github.com/Suryansh777777/Jarvis-CV"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-cyan-500 hover:text-cyan-300 transition-colors duration-300"
-      >
-        <Github size={16} className="md:w-5 md:h-5" />
-      </a>
-    </motion.div>
-  );
+  return null;
 };
 
 export default function HUD() {
@@ -176,7 +142,7 @@ export default function HUD() {
         {/* Scene Indicator (Top Center) */}
         <SceneIndicator />
 
-        {/* TOP LEFT: System Core */}
+        {/* 左上角：核心系统 */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -185,12 +151,12 @@ export default function HUD() {
           <div className="flex items-center gap-2 mb-2 border-b border-cyan-500/30 pb-2">
             <Cpu className="text-cyan-400 animate-pulse" size={18} />
             <span className="text-[10px] md:text-sm font-bold text-cyan-300 tracking-[0.2em]">
-              CORE SYSTEMS
+              核心系统
             </span>
           </div>
-          <DataRow label="CPU" value={`${cpuUsage}%`} />
-          <DataRow label="MEM" value="16.4 TB" />
-          <DataRow label="NET" value="SECURE" color="text-green-400" />
+          <DataRow label="处理器" value={`${cpuUsage}%`} />
+          <DataRow label="内存" value="16.4 TB" />
+          <DataRow label="网络" value="安全" color="text-green-400" />
 
           <div className="mt-2 flex gap-1">
             {[...Array(10)].map((_, i) => (
@@ -204,22 +170,22 @@ export default function HUD() {
           </div>
         </motion.div>
 
-        {/* TOP RIGHT: J.A.R.V.I.S Identity */}
+        {/* 右上角：贾维斯标识 */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           className="absolute top-20 right-4 md:top-10 md:right-10 text-right"
         >
           <h1 className="text-2xl md:text-4xl font-bold text-white tracking-[0.2em] text-glow opacity-90">
-            J.A.R.V.I.S
+            贾维斯
           </h1>
           <div className="flex items-center justify-end gap-2 text-cyan-400 text-[10px] md:text-xs tracking-[0.4em] mt-1">
             <span className="w-2 h-2 bg-cyan-400 rounded-full animate-ping" />
-            ONLINE
+            在线
           </div>
         </motion.div>
 
-        {/* BOTTOM RIGHT: Environmental Data */}
+        {/* 右下角：环境数据 */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -230,13 +196,13 @@ export default function HUD() {
               {hudState.powerLevel}%
             </span>
             <span className="text-[10px] md:text-xs text-cyan-500 mb-1">
-              OUTPUT CAPACITY
+              输出容量
             </span>
           </div>
 
           <div className="space-y-1">
             <div className="flex justify-between text-[10px] md:text-xs text-cyan-400">
-              <span>THREAT ANALYSIS</span>
+              <span>威胁分析</span>
               <span
                 className={
                   hudState.threatLevel === "MINIMAL"
@@ -244,7 +210,7 @@ export default function HUD() {
                     : "text-red-500"
                 }
               >
-                {hudState.threatLevel}
+                {hudState.threatLevel === "MINIMAL" ? "最低" : "警报"}
               </span>
             </div>
             <div className="h-1 bg-cyan-900/50 w-full">
@@ -257,19 +223,19 @@ export default function HUD() {
           </div>
         </motion.div>
 
-        {/* BOTTOM LEFT: Log Stream */}
+        {/* 左下角：日志流 */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           className="absolute bottom-24 left-4 md:bottom-20 md:left-10 w-40 md:w-64 text-[10px] md:text-xs font-mono text-cyan-500/60 space-y-1 hidden sm:block"
         >
-          <p>&gt; Initializing biometric sensors...</p>
-          <p>&gt; Connecting to satellite array...</p>
-          <p>&gt; Hand tracking active.</p>
+          <p>&gt; 初始化生物传感器...</p>
+          <p>&gt; 连接卫星阵列...</p>
+          <p>&gt; 手势追踪已激活</p>
           <p className="text-cyan-300 animate-pulse">&gt; {hudState.message}</p>
         </motion.div>
 
-        {/* CENTER: Reticle */}
+        {/* 中心：准星 */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] md:w-[400px] md:h-[400px] opacity-20 pointer-events-none">
           <div className="absolute inset-0 border border-cyan-500/30 rounded-full scale-[0.8]" />
           <div className="absolute inset-0 border-l border-r border-cyan-500/20 rounded-full animate-[spin_10s_linear_infinite]" />
@@ -280,10 +246,7 @@ export default function HUD() {
         </div>
       </motion.div>
 
-      {/* Social Links (Bottom Center) */}
-      <SocialLinks />
-
-      {/* Static Overlays (Vignette/Scanlines) */}
+      {/* 静态叠加层（渐晃/扫描线） */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_50%,black_120%)] pointer-events-none opacity-50" />
       <div className="absolute inset-0 scanline opacity-10 pointer-events-none" />
     </div>

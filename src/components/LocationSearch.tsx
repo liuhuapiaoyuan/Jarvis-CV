@@ -92,7 +92,7 @@ export default function LocationSearch() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="ENTER COORDINATES OR TARGET..."
+          placeholder="输入坐标或目标位置..."
           className="w-full bg-black/60 backdrop-blur-md border border-cyan-900/50 text-cyan-100 pl-12 pr-4 py-3 rounded-none focus:outline-none focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/50 placeholder-cyan-800/50 transition-all text-sm tracking-widest uppercase shadow-[0_0_15px_rgba(0,255,255,0.05)] focus:shadow-[0_0_20px_rgba(0,255,255,0.15)] placeholder-gray-500"
         />
         {/* Decorative Corner Accents */}
@@ -106,7 +106,7 @@ export default function LocationSearch() {
       {isOpen && results.length > 0 && (
         <div className="absolute bottom-full mb-2 w-full bg-black/90 backdrop-blur-xl border border-cyan-500/30 shadow-[0_0_30px_rgba(0,255,255,0.1)] overflow-hidden z-50">
           <div className="px-2 py-1 bg-cyan-950/30 border-b border-cyan-500/20 text-[10px] text-cyan-600 tracking-widest uppercase">
-            Search Results
+            搜索结果
           </div>
           <ul>
             {results.map((result) => (
