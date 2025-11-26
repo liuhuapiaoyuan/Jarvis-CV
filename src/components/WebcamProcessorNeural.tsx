@@ -442,37 +442,37 @@ export default React.memo(function WebcamProcessorNeural() {
         height={720}
       />
       
-      {/* GESTURE GUIDE UI */}
+      {/* 手势指南界面 */}
       <div className="absolute bottom-10 left-10 z-50 pointer-events-none">
         <div className="bg-black/60 backdrop-blur-md border border-cyan-500/30 rounded-xl p-4 text-cyan-100 font-mono text-xs tracking-wider shadow-[0_0_20px_rgba(0,243,255,0.1)]">
-            <h3 className="text-cyan-400 font-bold mb-3 border-b border-cyan-500/30 pb-1">NEURAL COMMANDS</h3>
+            <h3 className="text-cyan-400 font-bold mb-3 border-b border-cyan-500/30 pb-1">神经网络指令</h3>
             <ul className="space-y-2">
                 <li className="flex items-center gap-3">
-                    <span className="text-xl">🖐️</span> 
+                    <span className="text-xl">🖐️</span>
                     <div>
-                        <span className="text-cyan-300 font-bold">OPEN PALM</span>
-                        <p className="text-[10px] opacity-70">SWIPE (Motion) / PULSE (Hold)</p>
+                        <span className="text-cyan-300 font-bold">张开手掌</span>
+                        <p className="text-[10px] opacity-70">滑动切换 (移动) / 发送脉冲 (保持)</p>
                     </div>
                 </li>
                 <li className="flex items-center gap-3">
-                    <span className="text-xl">🤏</span> 
+                    <span className="text-xl">🤏</span>
                     <div>
-                        <span className="text-cyan-300 font-bold">PINCH (2 Hands)</span>
-                        <p className="text-[10px] opacity-70">SCALE GLOBE</p>
+                        <span className="text-cyan-300 font-bold">捏合 (双手)</span>
+                        <p className="text-[10px] opacity-70">缩放地球</p>
                     </div>
                 </li>
                 <li className="flex items-center gap-3">
-                    <span className="text-xl">✊</span> 
+                    <span className="text-xl">✊</span>
                     <div>
-                        <span className="text-cyan-300 font-bold">GRAB</span>
-                        <p className="text-[10px] opacity-70">ROTATE GLOBE</p>
+                        <span className="text-cyan-300 font-bold">握拳</span>
+                        <p className="text-[10px] opacity-70">旋转地球</p>
                     </div>
                 </li>
                 <li className="flex items-center gap-3">
-                    <span className="text-xl">✌️</span> 
+                    <span className="text-xl">✌️</span>
                     <div>
-                        <span className="text-cyan-300 font-bold">VICTORY</span>
-                        <p className="text-[10px] opacity-70">CYCLE THEME</p>
+                        <span className="text-cyan-300 font-bold">剪刀手</span>
+                        <p className="text-[10px] opacity-70">切换主题</p>
                     </div>
                 </li>
             </ul>

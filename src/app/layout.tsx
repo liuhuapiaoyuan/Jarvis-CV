@@ -1,7 +1,6 @@
-import type { Metadata, Viewport } from "next";
-import { Rajdhani, Share_Tech_Mono } from "next/font/google";
-import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -11,37 +10,24 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
-const rajdhani = Rajdhani({
-  variable: "--font-rajdhani",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const shareTechMono = Share_Tech_Mono({
-  variable: "--font-share-tech",
-  subsets: ["latin"],
-  weight: "400",
-});
-
 export const metadata: Metadata = {
-  title: "J.A.R.V.I.S. HUD",
-  description: "Advanced Holographic User Interface",
+  title: "贾维斯 HUD",
+  description: "先进全息用户界面",
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "J.A.R.V.I.S. HUD",
-    description: "Advanced Holographic User Interface",
+    title: "贾维斯 HUD",
+    description: "先进全息用户界面",
     url: "https://jarvis-cv.vercel.app/",
-    siteName: "J.A.R.V.I.S. HUD",
-    locale: "en_US",
+    siteName: "贾维斯 HUD",
+    locale: "zh_CN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "J.A.R.V.I.S. HUD",
-    description: "Advanced Holographic User Interface",
-    creator: "@suryansh777777",
+    title: "贾维斯 HUD",
+    description: "先进全息用户界面",
   },
 };
 
@@ -51,10 +37,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${rajdhani.variable} ${shareTechMono.variable} antialiased bg-black overflow-hidden`}
-      >
+    <html lang="zh-CN">
+      <body className={`antialiased bg-black overflow-hidden`}>
         {children}
         <Analytics />
       </body>

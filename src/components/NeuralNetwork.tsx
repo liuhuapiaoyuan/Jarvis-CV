@@ -14,28 +14,28 @@ const PULSE_WIDTH = 1.5;
 
 export const THEMES = {
   CYBER: {
-    name: "Cyberpunk",
+    name: "赛博朋克",
     bg: "#000000",
     node: "#2a0a5e",
     line: "#1a053e",
     pulse: "#00ffff", // Cyan
   },
   SOLAR: {
-    name: "Solar Flare",
+    name: "太阳耀斑",
     bg: "#050000",
     node: "#5e2a0a",
     line: "#3e1a05",
     pulse: "#ffaa00", // Gold/Orange
   },
   MATRIX: {
-    name: "The Matrix",
+    name: "黑客帝国",
     bg: "#000500",
     node: "#0a5e2a",
     line: "#053e1a",
     pulse: "#00ff44", // Green
   },
   FROST: {
-    name: "Permafrost",
+    name: "永久冻土",
     bg: "#000005",
     node: "#0a2a5e",
     line: "#051a3e",
@@ -323,7 +323,7 @@ export function Controls({
     >
       <div>
         <label className="text-xs uppercase tracking-widest text-gray-400 mb-2 block">
-          Theme
+          主题
         </label>
         <div className="flex gap-2">
           {Object.keys(THEMES).map((k) => {
@@ -349,7 +349,7 @@ export function Controls({
 
       <div>
         <div className="flex justify-between text-xs uppercase tracking-widest text-gray-400 mb-2">
-          <span>Density</span>
+          <span>密度</span>
           <span>{Math.round(density * 100)}%</span>
         </div>
         <input
@@ -359,13 +359,13 @@ export function Controls({
           step="0.1"
           value={density}
           onChange={(e) => setDensity(parseFloat(e.target.value))}
-          className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer 
+          className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer
                      accent-white hover:accent-cyan-400"
         />
       </div>
 
       <div className="text-[10px] text-center text-gray-500 mt-1">
-        CLICK ANYWHERE TO PULSE
+        点击任意位置发送脉冲
       </div>
     </div>
   );
