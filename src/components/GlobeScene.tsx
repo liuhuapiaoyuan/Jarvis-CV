@@ -1,12 +1,18 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Mesh, Group } from "three";
 import { useStore } from "@/store/useStore";
 import { Sphere, Torus, Ring, Icosahedron } from "@react-three/drei";
 import { DynamicNetwork } from "@/components/NeuralNetwork";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import dynamic from "next/dynamic";
+
+// Dynamically import WorldGlobe to avoid SSR issues
+const WorldGlobe = dynamic(() => import("@/components/WorldGlobe"), {
+  ssr: false,
+});
 
 function useResponsivePositionAndScale() {
   const { size } = useThree();
@@ -245,35 +251,46 @@ function NetworkScene({ active }: { active: boolean }) {
 
 export default function GlobeScene() {
   const { activeScene } = useStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className="absolute inset-0 z-10 pointer-events-none">
-      <Canvas
-        camera={{ position: [0, 0, 6], fov: 45 }}
-        gl={{
-          antialias: false, // Handled by postprocessing or not needed with bloom
-          alpha: true,
-          powerPreference: "high-performance",
-        }}
-      >
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
-        <pointLight position={[-10, -10, -10]} color="#00ffff" intensity={2} />
+      {/* Real Earth Globe - Scene 4 */}
+      {mounted && activeScene === 4 && <WorldGlobe />}
 
-        <ArcReactor active={activeScene === 0} />
-        <EarthScene active={activeScene === 1} />
-        <SolarSystem active={activeScene === 2} />
-        <NetworkScene active={activeScene === 3} />
+      {/* 3D Scenes - Scenes 0-3 */}
+      {activeScene !== 4 && (
+        <Canvas
+          camera={{ position: [0, 0, 6], fov: 45 }}
+          gl={{
+            antialias: false, // Handled by postprocessing or not needed with bloom
+            alpha: true,
+            powerPreference: "high-performance",
+          }}
+        >
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          <pointLight position={[-10, -10, -10]} color="#00ffff" intensity={2} />
 
-        <EffectComposer>
-          <Bloom
-            luminanceThreshold={0.2} // Higher threshold to avoid blooming everything
-            mipmapBlur
-            intensity={1.5}
-            radius={0.4}
-          />
-        </EffectComposer>
-      </Canvas>
+          <ArcReactor active={activeScene === 0} />
+          <EarthScene active={activeScene === 1} />
+          <SolarSystem active={activeScene === 2} />
+          <NetworkScene active={activeScene === 3} />
+
+          <EffectComposer>
+            <Bloom
+              luminanceThreshold={0.2} // Higher threshold to avoid blooming everything
+              mipmapBlur
+              intensity={1.5}
+              radius={0.4}
+            />
+          </EffectComposer>
+        </Canvas>
+      )}
     </div>
   );
 }

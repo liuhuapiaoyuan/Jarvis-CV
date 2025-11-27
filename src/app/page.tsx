@@ -2,6 +2,8 @@ import WebcamProcessorNeural from "@/components/WebcamProcessorNeural";
 import HandUI from "@/components/HandUI";
 import Link from "next/link";
 import NeuralScene from "@/components/NeuralScene";
+import GlobeScene from "@/components/GlobeScene";
+import SceneIndicator from "@/components/SceneIndicator";
 import { SocialLinks } from "@/components/SocialLinks";
 import PhysicsEmoji from "@/components/PhysicsEmoji";
 
@@ -11,14 +13,18 @@ export default function Home() {
       {/* 背景：摄像头采集 */}
       <WebcamProcessorNeural />
 
-      {/* 中间层：神经网络场景 */}
+      {/* 中间层：神经网络场景 + 多场景切换（包括地球） */}
       <NeuralScene />
+      <GlobeScene />
 
       {/* 手势交互层 */}
       <HandUI />
 
       {/* 物理Emoji交互层 */}
       <PhysicsEmoji />
+
+      {/* 场景指示器 */}
+      <SceneIndicator />
 
       <SocialLinks className="top-6 left-10" />
 
