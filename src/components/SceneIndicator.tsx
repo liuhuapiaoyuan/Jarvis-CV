@@ -3,11 +3,11 @@
 import { useStore } from "@/store/useStore";
 
 const SCENE_NAMES = [
-  { name: "方舟反应堆", icon: "⚡", color: "cyan" },
-  { name: "全息地球", icon: "🌐", color: "green" },
-  { name: "太阳系", icon: "☀️", color: "yellow" },
-  { name: "神经网络", icon: "🧠", color: "purple" },
-  { name: "真实地球", icon: "🌍", color: "blue" },
+  { name: "方舟反应堆", icon: "⚡", colorClass: "text-cyan-400" },
+  { name: "全息地球", icon: "🌐", colorClass: "text-green-400" },
+  { name: "太阳系", icon: "☀️", colorClass: "text-yellow-400" },
+  { name: "神经网络", icon: "🧠", colorClass: "text-purple-400" },
+  { name: "真实地球", icon: "🌍", colorClass: "text-blue-400" },
 ];
 
 export default function SceneIndicator() {
@@ -22,9 +22,7 @@ export default function SceneIndicator() {
           <p className="text-xs text-cyan-400/70 font-mono tracking-widest">
             场景 {activeScene + 1}/5
           </p>
-          <p
-            className={`text-sm font-mono tracking-wider text-${scene.color}-400`}
-          >
+          <p className={`text-sm font-mono tracking-wider ${scene.colorClass}`}>
             {scene.name}
           </p>
         </div>

@@ -1,7 +1,6 @@
 import WebcamProcessorNeural from "@/components/WebcamProcessorNeural";
 import HandUI from "@/components/HandUI";
 import Link from "next/link";
-import NeuralScene from "@/components/NeuralScene";
 import GlobeScene from "@/components/GlobeScene";
 import SceneIndicator from "@/components/SceneIndicator";
 import { SocialLinks } from "@/components/SocialLinks";
@@ -13,8 +12,7 @@ export default function Home() {
       {/* 背景：摄像头采集 */}
       <WebcamProcessorNeural />
 
-      {/* 中间层：神经网络场景 + 多场景切换（包括地球） */}
-      <NeuralScene />
+      {/* 中间层：多场景切换（包括地球、神经网络等） */}
       <GlobeScene />
 
       {/* 手势交互层 */}

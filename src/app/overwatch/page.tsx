@@ -4,7 +4,6 @@ import OverwatchScene from "@/components/OverwatchScene";
 import HandUI from "@/components/HandUI";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import LocationSearch from "@/components/LocationSearch";
 import { SocialLinks } from "@/components/SocialLinks";
 import PhysicsEmoji from "@/components/PhysicsEmoji";
 
@@ -14,7 +13,7 @@ export default function OverwatchPage() {
       {/* 背景视频 / 手势处理器 - 画中画模式 */}
       <WebcamProcessorOverwatch className="fixed bottom-6 right-6 w-80 h-60 rounded-2xl overflow-hidden border-2 border-cyan-500/50 z-50 shadow-[0_0_30px_rgba(0,255,255,0.2)] bg-black/80 backdrop-blur-sm" />
 
-      {/* 监控场景（动态） */}
+      {/* 监控场景（真实地球） */}
       <OverwatchScene />
 
       {/* 手势交互层 */}
@@ -38,10 +37,6 @@ export default function OverwatchPage() {
         </Link>
       </div>
 
-      {/* 位置搜索 */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-md pointer-events-auto">
-        <LocationSearch />
-      </div>
       <SocialLinks className="top-6 right-10"/>
     </main>
   );

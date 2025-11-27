@@ -37,9 +37,9 @@ export default function WorldGlobe() {
   const globeRef = useRef<GlobeMethods | undefined>(undefined);
   const { globeRotation, globeScale, timeSpeed } = useStore();
   const [mounted, setMounted] = useState(false);
-  
-  // Generate static flights
-  const flights = useMemo(() => generateFlights(30), []);
+
+  // Generate static flights - reduced from 30 to 15 for better performance
+  const flights = useMemo(() => generateFlights(10), []);
 
   useEffect(() => {
     setMounted(true);
@@ -47,7 +47,7 @@ export default function WorldGlobe() {
 
   // Sync Rotation & Time Speed
   useEffect(() => {
-    if (globeRef.current) {
+    if (globeRef.current && mounted) {
       // Apply rotation from store (if gesture is active)
       // Note: react-globe.gl controls its own camera, but we can influence it
       const controls = globeRef.current.controls();
@@ -56,12 +56,12 @@ export default function WorldGlobe() {
         controls.autoRotateSpeed = 0.5 * timeSpeed; // Control speed with Time Stone
       }
     }
-  }, [timeSpeed]);
+  }, [timeSpeed, mounted]);
 
   if (!mounted) return null;
 
   return (
-    <div className="absolute inset-0 z-10">
+    <div className="absolute inset-0 z-10 pointer-events-none">
       <Globe
         ref={globeRef}
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
@@ -76,6 +76,10 @@ export default function WorldGlobe() {
         width={window.innerWidth}
         height={window.innerHeight}
         backgroundColor="rgba(0,0,0,0)"
+        rendererConfig={{
+          antialias: false,
+          powerPreference: "high-performance"
+        }}
       />
     </div>
   );
